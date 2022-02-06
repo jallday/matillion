@@ -1,0 +1,33 @@
+version: '3.8'
+
+networks:
+  matillion:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.160.254.0/24
+          ip_range: 192.160.254.0/24
+
+services: 
+  start_dependencies:
+    build:
+      context: ./
+      dockerfile: build/wait-for-it/Dockerfile
+    depends_on:
+      - db
+    command: db:5432
+    networks:
+      - matillion
+
+  db:
+    image: postgres:10
+    restart: always
+    environment:
+      POSTGRES_USER: mtuser
+      POSTGRES_PASSWORD: mt123
+      POSTGRES_DB: test
+    ports:
+      - '5432:5432'
+    networks: 
+      - matillion

@@ -1,0 +1,433 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Package core-service",
+    "version": "1.0.0"
+  },
+  "basePath": "/api/v1/",
+  "paths": {
+    "/films": {
+      "get": {
+        "tags": [
+          "Films"
+        ],
+        "summary": "List Films",
+        "operationId": "Films",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "description": "the page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int32",
+            "description": "the number of results per page",
+            "name": "per_page",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "films response",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Film"
+              }
+            }
+          },
+          "default": {
+            "description": "error response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/films/{film_id}/ratings": {
+      "get": {
+        "tags": [
+          "Films"
+        ],
+        "summary": "List Film's Rating",
+        "operationId": "Films",
+        "parameters": [
+          {
+            "name": "film id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "format": "int32",
+            "description": "the page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int32",
+            "description": "the number of results per page",
+            "name": "per_page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int32",
+            "description": "the maximum score for ratings",
+            "name": "max_score",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int32",
+            "description": "the minimum score for ratings",
+            "name": "min_score",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "film's rating response",
+            "schema": {
+              "$ref": "#/definitions/FilmRatings"
+            }
+          },
+          "default": {
+            "description": "error response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/ratings": {
+      "post": {
+        "tags": [
+          "Rating"
+        ],
+        "summary": "Create Rating",
+        "operationId": "Rating",
+        "parameters": [
+          {
+            "name": "rating",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Rating"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "rating response",
+            "schema": {
+              "$ref": "#/definitions/Rating"
+            }
+          },
+          "default": {
+            "description": "error response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/system/ping": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Ping System",
+        "operationId": "System",
+        "responses": {
+          "200": {
+            "description": "system response",
+            "schema": {
+              "$ref": "#/definitions/System"
+            }
+          },
+          "default": {
+            "description": "error response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "object",
+      "properties": {
+        "detailed_error": {
+          "description": "detailed error message",
+          "type": "string",
+          "x-go-name": "DetailedError"
+        },
+        "id": {
+          "description": "api error id code",
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "params": {
+          "description": "parameters relating to the error",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          },
+          "x-go-name": "Params"
+        },
+        "request_id": {
+          "description": "the id of the request",
+          "type": "string",
+          "x-go-name": "RequestId"
+        }
+      },
+      "x-go-package": "gitlab.com/joshuaAllday/matillion/pkg/utils/models"
+    },
+    "Film": {
+      "type": "object",
+      "required": [
+        "title",
+        "episode_id"
+      ],
+      "properties": {
+        "created_at": {
+          "description": "time the film was created at",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt",
+          "readOnly": true
+        },
+        "deleted_at": {
+          "description": "time film was deleted at",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "DeletedAt",
+          "readOnly": true
+        },
+        "director": {
+          "description": "The name of the director of the film",
+          "type": "string",
+          "maxLength": 128,
+          "x-go-name": "Director"
+        },
+        "episode_id": {
+          "description": "Episode number of the film",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "EpisodeID"
+        },
+        "id": {
+          "description": "Id of the film",
+          "type": "string",
+          "x-go-name": "ID",
+          "readOnly": true
+        },
+        "producer": {
+          "description": "The name of the producer of the film",
+          "type": "string",
+          "maxLength": 128,
+          "x-go-name": "Producer"
+        },
+        "release_date": {
+          "description": "The time the film was released",
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "ReleaseDate"
+        },
+        "title": {
+          "description": "Title of the film",
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-go-name": "Title"
+        },
+        "updated_at": {
+          "description": "time the film was last updated at",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt",
+          "readOnly": true
+        }
+      },
+      "x-go-package": "gitlab.com/joshuaAllday/matillion/pkg/utils/models"
+    },
+    "FilmRatings": {
+      "type": "object",
+      "required": [
+        "title",
+        "episode_id"
+      ],
+      "properties": {
+        "created_at": {
+          "description": "time the film was created at",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt",
+          "readOnly": true
+        },
+        "deleted_at": {
+          "description": "time film was deleted at",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "DeletedAt",
+          "readOnly": true
+        },
+        "director": {
+          "description": "The name of the director of the film",
+          "type": "string",
+          "maxLength": 128,
+          "x-go-name": "Director"
+        },
+        "episode_id": {
+          "description": "Episode number of the film",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "EpisodeID"
+        },
+        "id": {
+          "description": "Id of the film",
+          "type": "string",
+          "x-go-name": "ID",
+          "readOnly": true
+        },
+        "producer": {
+          "description": "The name of the producer of the film",
+          "type": "string",
+          "maxLength": 128,
+          "x-go-name": "Producer"
+        },
+        "ratings": {
+          "description": "ratings of the film",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Rating"
+          },
+          "x-go-name": "Ratings",
+          "readOnly": true
+        },
+        "release_date": {
+          "description": "The time the film was released",
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "ReleaseDate"
+        },
+        "title": {
+          "description": "Title of the film",
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-go-name": "Title"
+        },
+        "updated_at": {
+          "description": "time the film was last updated at",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt",
+          "readOnly": true
+        }
+      },
+      "x-go-package": "gitlab.com/joshuaAllday/matillion/pkg/utils/models"
+    },
+    "Rating": {
+      "type": "object",
+      "required": [
+        "author",
+        "film_id",
+        "score"
+      ],
+      "properties": {
+        "author": {
+          "description": "Author of the rating",
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-go-name": "Author"
+        },
+        "created_at": {
+          "description": "time the rating was created at",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt",
+          "readOnly": true
+        },
+        "deleted_at": {
+          "description": "time rating was deleted at",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "DeletedAt",
+          "readOnly": true
+        },
+        "film_id": {
+          "description": "Id of the film the rating relates too",
+          "type": "string",
+          "pattern": "[A-Za-z0-9_+]",
+          "x-go-name": "FilmID"
+        },
+        "id": {
+          "description": "Id of the rating",
+          "type": "string",
+          "x-go-name": "ID",
+          "readOnly": true
+        },
+        "score": {
+          "description": "The name of the score of the film",
+          "type": "integer",
+          "format": "int64",
+          "maximum": 5,
+          "minimum": 0,
+          "x-go-name": "Score"
+        },
+        "updated_at": {
+          "description": "time the rating was last updated at",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt",
+          "readOnly": true
+        }
+      },
+      "x-go-package": "gitlab.com/joshuaAllday/matillion/pkg/utils/models"
+    },
+    "System": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "description": "a message describing the system health",
+          "type": "string",
+          "x-go-name": "Message",
+          "readOnly": true
+        },
+        "status": {
+          "description": "the status of the system",
+          "type": "string",
+          "x-go-name": "Status",
+          "readOnly": true
+        },
+        "version": {
+          "description": "the current version the server is runnnig",
+          "type": "string",
+          "x-go-name": "Version",
+          "readOnly": true
+        }
+      },
+      "x-go-package": "gitlab.com/joshuaAllday/matillion/pkg/utils/models"
+    }
+  }
+}
